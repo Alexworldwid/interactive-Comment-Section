@@ -2,80 +2,126 @@
 
 import Image from "next/image";
 import Commentlist from "./components/ui/commentlist";
-import Form from "./components/ui/form";
 import { useEffect, useState } from "react";
-import { User, Comment } from "./components/utils/types";
-import { currentUser } from "c:/Users/Adewale Obadun/myproject/interactive-comments-section-main/src/app/lib/db"
-
+import { User, Comment, Reply } from "./components/utils/types";
+import { currentUser } from "./lib/db"; 
 
 
 export default function Home() {
   const [comments, setComments] = useState<Comment[]>([]);
   const user: User = currentUser;
 
-  
-  //fetch comments from API
-  const fetchComments = async () => {
+  //add comment Logic
+  const addNewComment = (newComment: Comment) => {
+    setComments((prevComments) => [...prevComments, { ...newComment, id: prevComments.length + 1 }]);
+  }
+
+  //add reply Logic
+  const addNewReply = (parentId: number, newReply: Reply) => {
+    setComments((prevComments) => 
+      prevComments.map(comment => {
+        if (comment.id === parentId) {
+          return {
+            ...comment,
+            replies: [...comment.replies, { ...newReply, id: comment.replies.length + 1 }]
+          };
+        } 
+        return comment;
+      })
+    );
+  };
+
+  //update comment or reply Logic
+  const editCommentOrReply = (updatedContent: string, commentId: number, replyId?: number) => {
     try {
-      const res = await fetch('/comments');
+        setComments((prevComments) => 
+            prevComments.map(comment => {
+                if (comment.id === commentId) {
+                    if (replyId === undefined) {
+                        // Update comment content
+                        return { ...comment, content: updatedContent };
+                    } else {
+                        // Update reply content
+                        const updatedReplies = comment.replies.map(reply =>
+                            reply.id === replyId ? { ...reply, content: updatedContent } : reply
+                        );
+                        return { ...comment, replies: updatedReplies };
+                    }
+                }
+                return comment;
+            })
+        );
+    } catch (error) {
+        console.error('Error updating comment or reply:', error);
+    }
+  };
+
+  //delete comment or reply 
+const deleteCommentOrReply = async (commentId: number, replyId?: number) => {
+  try {
+      // If replyId is provided, delete the reply
+      if (replyId !== undefined) {
+          const res = await fetch(`/api/comments/${commentId}/${replyId}`, {
+              method: 'DELETE',
+          });
+          if (!res.ok) {
+              throw new Error('Failed to delete reply');
+          }
+      } else {
+          // If replyId is not provided, delete the comment
+          const res = await fetch(`/api/comments/${commentId}`, {
+              method: 'DELETE',
+          });
+          if (!res.ok) {
+              throw new Error('Failed to delete comment');
+          }
+      }
+
+      // After successful deletion, update the state to reflect the changes
+      setComments((prevComments) => {
+          if (replyId !== undefined) {
+              return prevComments.map(comment => {
+                  if (comment.id === commentId) {
+                      const updatedReplies = comment.replies.filter(reply => reply.id !== replyId);
+                      return { ...comment, replies: updatedReplies };
+                  }
+                  return comment;
+              });
+          } else {
+              return prevComments.filter(comment => comment.id !== commentId);
+          }
+      });
+  } catch (error) {
+      console.error('Error deleting comment or reply:', error);
+  }
+}
+
+
+  //fetch Comment when Component mounts
+  useEffect(() => {
+    const fetchComments = async () => {
+      const res = await fetch('/api/comments');
       if(!res.ok) {
-        throw new Error ('response not ok :(')
+        throw new Error('res not ok');
       }
       const data = await res.json();
       setComments(data);
-      console.log(data, res.statusText, res.status, res);
-    } catch (error) {
-      console.error(error);
     }
-  };
 
-
-  //Add a new top comment by sending a Post request to the API 
-  const addComment = async (content: string, user: User) => {
-    const res = await fetch('/comments', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ content, user })
-    });
-
-    const newComment = await res.json();
-    setComments([...comments, newComment]);
-  };
-
-
-  //Handle upvote and downvote by sending a PATCH request to the API
-  const handleVote = async (id:number, type: 'up' | 'down') => {
-    const comment = comments.find(comment => comment.id === id);
-    if (comment) {
-      const updatedComment = {
-        ...comment, 
-        score: type === 'up' ? comment.score + 1 : comment.score - 1
-      }
-
-      await fetch(`/api/comments/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updatedComment)
-      });
-
-      setComments(comments.map(comment => (comment.id === id ? updatedComment : comment)))
-    }
-  };
-
-
-  useEffect(() => {
     fetchComments();
-  }, [])
+  }, []);
 
-
+  
+  
   return (
     <main className="bg-[#EAECF1] p-6 pt-8">
-      <Commentlist comments={comments} onVote={handleVote} currentUser={user} />
-      <Form onSubmit={addComment} currentUser={user} />
+      <Commentlist 
+      comments={comments} 
+      user={user} 
+      addNewComment={addNewComment} 
+      addNewReply={addNewReply} 
+      editCommentOrReply={editCommentOrReply}
+      deleteCommentOrReply={deleteCommentOrReply}  />
     </main>
   );
 }

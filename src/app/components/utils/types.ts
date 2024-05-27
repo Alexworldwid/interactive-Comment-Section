@@ -3,18 +3,21 @@ export type User = {
     username: string
 }
 
-export type CommentBase = {
+export type Comment = {
     id: number,
     content: string,
     createdAt: string,
     score: number,
     user: User,
-}
-
-export type Comment = CommentBase & {
     replies: Reply[]
 }
 
-export type Reply = CommentBase & {
-    replyingTo: string
+
+export type Reply = {
+    id: number,
+    content: string,
+    createdAt: string,
+    score: number,
+    replyingTo: string,
+    user: User,
 }
