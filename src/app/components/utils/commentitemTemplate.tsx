@@ -6,6 +6,9 @@ import { MdDelete } from 'react-icons/md';
 import { CiEdit } from 'react-icons/ci';
 import ReplyForm from '../ui/replyForm';
 import EditForm from '../ui/editCommentForm';
+import DeleteCommentModal from '../ui/deleteCommentModal';
+import { formatDistanceToNow, parseISO, isValid } from 'date-fns';
+
 
 
 interface CommentItemsProps {
@@ -13,13 +16,17 @@ interface CommentItemsProps {
     currentUser: User,
     addReply: (content: string, user: User, parentId: number, replyingTo: string ) => void,
     editCommentOrReply: (updatedComment: string, commentId: number, replyId?: number) => void
-    deleteCommentOrReply: (commentId: number, replyId: number) => void
+    deleteCommentOrReply: (commentId: number, replyId?: number) => void,
 }
 
-const Commentitems:React.FC<CommentItemsProps> = ({ comment, currentUser, addReply, editCommentOrReply, deleteCommentOrReply}) => {
+const Commentitems:React.FC<CommentItemsProps> = ({ comment, currentUser, addReply, editCommentOrReply, deleteCommentOrReply }) => {
     const [replying, setReplying] = useState<boolean>(false);
     const [editing, setEditing] = useState<boolean>(false);
-    const [vote, setVote] = useState<number>(comment.score)
+    const [vote, setVote] = useState<number>(comment.score);
+    const [isOpen, setIsOpen] = useState<boolean> (false);
+    const formattedTime = isValid(parseISO(comment.createdAt))
+        ? formatDistanceToNow(parseISO(comment.createdAt), { addSuffix: true })
+        : 'Invalid date';
 
     const handleIsReplying = () => {
         setReplying(!replying)
@@ -29,6 +36,10 @@ const Commentitems:React.FC<CommentItemsProps> = ({ comment, currentUser, addRep
     const handleEditing = () => {
         setEditing(!editing)
     }
+
+    const handleCommentModal = () => [
+        setIsOpen(!isOpen)
+    ]
 
 
     // PATCH a comment 
@@ -106,7 +117,7 @@ const Commentitems:React.FC<CommentItemsProps> = ({ comment, currentUser, addRep
                 <div className='bg-white my-5 rounded-lg p-4 pb-0'>
                     <span className='flex gap-10 items-center mb-2'>
                         <Image src={comment.user.image.webp} width={40} height={20} alt={`${comment.user.username} image` } />
-                        <p className='font-bold text-xl'>{comment.user.username}</p>
+                        <p className='font-bold text-xl text-[#5457B6]'>{comment.user.username}</p>
                         <p className='text-[#67727E]'>{comment.createdAt}</p>
                     </span>
 
@@ -147,13 +158,15 @@ const Commentitems:React.FC<CommentItemsProps> = ({ comment, currentUser, addRep
             <div className='bg-white mb-4 rounded-lg p-4 '>
                 <span className='flex gap-10 items-center mb-2'>
                     <Image src={currentUser.image.png} alt={`${currentUser.username} image`} width={40} height={40} />
-                    <p>{currentUser.username} <span>you</span></p>
-                    <p>{comment.createdAt}</p>
+                    <p className='flex gap-2 items-center text-[#5457B6] text-lg md:text-xl font-bold '>{currentUser.username} 
+                        <span className='bg-[#5457B6] text-white px-2 pb-1 text-center rounded-lg'>you</span>
+                    </p>
+                    <p>{formattedTime}</p>
                 </span>
 
                 <span>
                     {!editing && (
-                        <p> {comment.content}</p>
+                        <p className='text-[#67727E] md:text-xl font-medium'> {comment.content}</p>
                     )}
                     
                     {editing && (
@@ -174,17 +187,24 @@ const Commentitems:React.FC<CommentItemsProps> = ({ comment, currentUser, addRep
                         <button className='text-2xl text-slate-600 font-bold' onClick={() => DownVote(1, comment.id)}>-</button>
                     </span>
 
-                    <span className='flex items-center gap-4'>
-                        <button className='flex items-center gap-1 hover:scale-105 transition-all duration-200 ease-in-out text-red-600 font-bold'  onClick={() => deleteCommentOrReply(comment.id, undefined)}>
-                            <MdDelete />
-                            Delete
-                        </button>
-                        <button className='flex items-center gap-1 hover:scale-105 transition-all duration-200 ease-in-out text-[#5457B6] font-bold' onClick={handleEditing}>
-                            <CiEdit />
-                            Edit
-                        </button>
-                    </span>
+                    {!editing && (
+                        <span className='flex items-center gap-4'>
+                            <button className='flex items-center gap-1 hover:scale-105 transition-all duration-200 ease-in-out text-red-600 font-bold' onClick={handleCommentModal} >
+                                <MdDelete />
+                                Delete
+                            </button>
+                            <button className='flex items-center gap-1 hover:scale-105 transition-all duration-200 ease-in-out text-[#5457B6] font-bold' onClick={handleEditing}>
+                                <CiEdit />
+                                Edit
+                            </button>
+                        </span>
+                    )}
                 </span>
+
+                    {
+                      isOpen && <DeleteCommentModal deleteCommentOrReply={deleteCommentOrReply} commentId={comment.id} handleCommentModal={handleCommentModal} />
+                    } 
+                
             </div>
         )}
         </>

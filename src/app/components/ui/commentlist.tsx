@@ -14,7 +14,7 @@ interface CommentlistProps {
     addNewComment: (newComment: Comment) => void,
     addNewReply: (parentId: number, newReply: Reply) => void,
     editCommentOrReply: (updatedComment: string, commentId: number, replyId?: number) => void,
-    deleteCommentOrReply: (commentId: number, replyId?: number) => void
+    deleteCommentOrReply: (commentId: number, replyId?: number) => void,
 }
 
 
@@ -73,6 +73,7 @@ const Commentlist:React.FC<CommentlistProps> = ({ comments, user, addNewComment,
                         addReply={addReply}
                         editCommentOrReply={editCommentOrReply}
                         deleteCommentOrReply={deleteCommentOrReply}
+                        
                         />
                         <ul className='flex flex-col items-end border-l-2 border-black border-solid'>
                             {comment.replies && comment.replies.map(reply => (
@@ -84,6 +85,7 @@ const Commentlist:React.FC<CommentlistProps> = ({ comments, user, addNewComment,
                                 editCommentOrReply={editCommentOrReply}
                                 comment={comment}
                                 deleteCommentOrReply={deleteCommentOrReply}
+                                
                             />
                             ))}
                         </ul>

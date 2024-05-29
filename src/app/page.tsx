@@ -10,6 +10,7 @@ import { currentUser } from "./lib/db";
 export default function Home() {
   const [comments, setComments] = useState<Comment[]>([]);
   const user: User = currentUser;
+  
 
   //add comment Logic
   const addNewComment = (newComment: Comment) => {
@@ -97,6 +98,7 @@ const deleteCommentOrReply = async (commentId: number, replyId?: number) => {
 }
 
 
+
   //fetch Comment when Component mounts
   useEffect(() => {
     const fetchComments = async () => {
@@ -114,14 +116,15 @@ const deleteCommentOrReply = async (commentId: number, replyId?: number) => {
   
   
   return (
-    <main className="bg-[#EAECF1] p-6 pt-8">
+    <main className={` p-6 pt-8 bg-[#EAECF1]`}>
       <Commentlist 
       comments={comments} 
       user={user} 
       addNewComment={addNewComment} 
       addNewReply={addNewReply} 
       editCommentOrReply={editCommentOrReply}
-      deleteCommentOrReply={deleteCommentOrReply}  />
+      deleteCommentOrReply={deleteCommentOrReply}  
+      />
     </main>
   );
 }

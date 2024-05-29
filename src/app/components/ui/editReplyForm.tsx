@@ -38,9 +38,9 @@ const EditReplyForm: React.FC<ReplyFormProps> = ({ content, parentId, replyId, r
                 ></textarea>
             </div>
 
-            <div>
-                <button type='button' onClick={cancel}>Cancel</button>
-                <button type='submit'>Update</button>
+            <div className='flex justify-end'>
+                {/* <button type='button' onClick={cancel}>Cancel</button> */}
+                <button className='bg-[#5457B6] p-1 px-2 text-white font-semibold rounded-lg' type='submit'>Update</button>
             </div>
         </form>
     );
