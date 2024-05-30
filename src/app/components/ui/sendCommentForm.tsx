@@ -22,17 +22,26 @@ const CommentForm:React.FC<FormProps> = ({ newCommentContent, setNewCommentConte
 
     return (
         <form className='w-full my-4 bg-white p-4 rounded-lg' onSubmit={handleSubmit}>
-            <textarea 
-            name="comment" 
-            id="comment" 
-            value={newCommentContent} 
-            onChange={(e) => setNewCommentContent(e.target.value)}
-            rows={3}
-            placeholder='Add a comment...'
-            className='w-full border p-4 placeholder:text-xl placeholder:font-semibold'
-            ></textarea>
+            <div className='flex items-start gap-2'>
+                <Image src={currentUser.image.png} alt={currentUser.username} width={40} height={40} className='hidden md:block' />
+                
+                <textarea 
+                name="comment" 
+                id="comment" 
+                value={newCommentContent} 
+                onChange={(e) => setNewCommentContent(e.target.value)}
+                rows={3}
+                placeholder='Add a comment...'
+                className='w-full border p-4 placeholder:text-xl placeholder:font-semibold'
+                ></textarea>
 
-            <div className='flex justify-between w-full mt-3'>
+                <button type='submit' className='text-2xl font-semibold hidden md:block'>
+                    SEND
+                </button>
+            </div>
+            
+
+            <div className='flex justify-between w-full mt-3 md:hidden'>
                 <Image src={currentUser.image.png} alt={currentUser.username} width={40} height={40} />
                 
                 <button type='submit' className='text-2xl font-semibold'>

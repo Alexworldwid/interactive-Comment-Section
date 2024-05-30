@@ -116,7 +116,7 @@ const deleteCommentOrReply = async (commentId: number, replyId?: number) => {
   
   
   return (
-    <main className={` p-6 pt-8 bg-[#EAECF1]`}>
+    <main className={` p-6 pt-8 bg-[#EAECF1] justify-center flex `}>
       <Commentlist 
       comments={comments} 
       user={user} 

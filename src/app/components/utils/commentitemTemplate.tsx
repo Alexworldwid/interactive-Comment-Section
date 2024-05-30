@@ -11,6 +11,7 @@ import { formatDistanceToNow, parseISO, isValid } from 'date-fns';
 
 
 
+
 interface CommentItemsProps {
     comment: Comment,
     currentUser: User,
@@ -114,18 +115,36 @@ const Commentitems:React.FC<CommentItemsProps> = ({ comment, currentUser, addRep
         <>
         {currentUser.username !== comment.user.username && (
             <div>
-                <div className='bg-white my-5 rounded-lg p-4 pb-0'>
-                    <span className='flex gap-10 items-center mb-2'>
-                        <Image src={comment.user.image.webp} width={40} height={20} alt={`${comment.user.username} image` } />
-                        <p className='font-bold text-xl text-[#5457B6]'>{comment.user.username}</p>
-                        <p className='text-[#67727E]'>{comment.createdAt}</p>
-                    </span>
+                <div className='bg-white my-5 rounded-lg p-4 pb-0 md:flex md:items-start md:gap-3'>
+                    <div className='hidden md:flex bg-slate-200 rounded-lg'>
+                        <span className='flex flex-col p-2 '>
+                            <button className='text-2xl text-slate-600 font-bold' onClick={() => upvoteComment(1, comment.id)}>+</button>
+                            <p className='text-2xl font-bold'>{vote}</p>
+                            <button className='text-2xl text-slate-600 font-bold' onClick={() => DownVote(1, comment.id)}>-</button>
+                        </span>
+                    </div>
 
-                    <span>
-                        <p className='text-[#67727E] md:text-xl font-medium'>{comment.content}</p>
-                    </span>
+                    <div className='md:pb-4'>
+                        <span className='flex gap-10 items-center justify-between mb-2'>
+                            <span className='flex items-center gap-6'>
+                                <Image src={comment.user.image.webp} width={40} height={20} alt={`${comment.user.username} image` } />
+                                <p className='font-bold text-xl text-[#5457B6] '>{comment.user.username}</p>
+                                <p className='text-[#67727E]'>{comment.createdAt}</p>
+                            </span>
+                
+                            <button onClick={handleIsReplying} className='hidden md:flex items-center gap-2 hover:scale-105 transition-all duration-200 ease-in-out text-[#5457B6] font-bold'>
+                                <FaReply  />
+                                Reply
+                            </button>
+                        </span>
 
-                    <span className='flex justify-between items-center pb-4'>
+                        <span className='md:mb-4'>
+                            <p className='text-[#67727E] md:text-xl font-medium'>{comment.content}</p>
+                        </span>
+
+                    </div>
+                    
+                    <span className='flex justify-between items-center pb-4 md:hidden'>
                         <span className='flex gap-3 bg-[#d5dae0] p-2 mt-4 rounded-xl w-28 justify-between items-center'>
                             <button className='text-2xl text-slate-600 font-bold' onClick={() => upvoteComment(1, comment.id)}>+</button>
                             <p className='text-2xl font-bold'>{vote}</p>
@@ -155,39 +174,56 @@ const Commentitems:React.FC<CommentItemsProps> = ({ comment, currentUser, addRep
 
 
         {currentUser.username === comment.user.username && (
-            <div className='bg-white mb-4 rounded-lg p-4 '>
-                <span className='flex gap-10 items-center mb-2'>
-                    <Image src={currentUser.image.png} alt={`${currentUser.username} image`} width={40} height={40} />
-                    <p className='flex gap-2 items-center text-[#5457B6] text-lg md:text-xl font-bold '>{currentUser.username} 
-                        <span className='bg-[#5457B6] text-white px-2 pb-1 text-center rounded-lg'>you</span>
-                    </p>
-                    <p>{formattedTime}</p>
+            <div className='bg-white mb-4 rounded-lg p-4 md:flex items-start gap-3'>
+                {/* button on medium screen */}
+                <span className='flex-col p-2 hidden md:flex bg-slate-200 rounded-lg'>
+                    <button className='text-2xl text-slate-600 font-bold' onClick={() => upvoteComment(1, comment.id)}>+</button>
+                    <p className='text-2xl font-bold'>{vote}</p>
+                    <button className='text-2xl text-slate-600 font-bold' onClick={() => DownVote(1, comment.id)}>-</button>
                 </span>
 
-                <span>
-                    {!editing && (
-                        <p className='text-[#67727E] md:text-xl font-medium'> {comment.content}</p>
-                    )}
-                    
-                    {editing && (
-                        <EditForm 
-                        editComment={editComment} 
-                        commentId={comment.id} 
-                        content={comment.content} 
-                        handleIsEditing={handleEditing}  
-                        />
-                    )}
-                    
-                </span>
+                <div className='flex flex-col mb-2 gap-3 w-full'>
+                    <div className='flex items-center justify-between'>
+                        <div className='flex items-center gap-6'>
+                            <Image src={currentUser.image.png} alt={`${currentUser.username} image`} width={40} height={40} />
+                            <p className='flex gap-2 items-center text-[#5457B6] text-lg md:text-xl font-bold '>{currentUser.username} 
+                                <span className='bg-[#5457B6] text-white px-2 pb-1 text-center rounded-lg'>you</span>
+                            </p>
+                            <p className='text-slate-600 font-semibold text-lg md:text-xl'>{formattedTime}</p>
+                        </div>
 
-                <span className='flex justify-between items-center pb-4'>
-                    <span className='flex gap-3 bg-[#d5dae0] p-2 mt-4 rounded-xl w-28 justify-between items-center'>
-                        <button className='text-2xl text-slate-600 font-bold' onClick={() => upvoteComment(1, comment.id)}>+</button>
-                        <p className='text-2xl font-bold'>{vote}</p>
-                        <button className='text-2xl text-slate-600 font-bold' onClick={() => DownVote(1, comment.id)}>-</button>
+                        <div className='md:flex items-center gap-4 hidden'>
+                            <button className='flex items-center gap-1 hover:scale-105 transition-all duration-200 ease-in-out text-red-600 font-bold' onClick={handleCommentModal} >
+                                <MdDelete />
+                                Delete
+                            </button>
+                            <button className='flex items-center gap-1 hover:scale-105 transition-all duration-200 ease-in-out text-[#5457B6] font-bold' onClick={handleEditing}>
+                                <CiEdit />
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+
+                    <span className=''>
+                        {!editing && (
+                            <p className='text-[#67727E] md:text-xl font-medium'> {comment.content}</p>
+                        )}
+                        
+                        {editing && (
+                            <EditForm editComment={editComment} commentId={comment.id} content={comment.content} handleIsEditing={handleEditing}  />
+                        )}
                     </span>
+                </div>
+                
 
-                    {!editing && (
+                {!editing && (
+                     <span className='flex justify-between items-center pb-4 md:hidden'>
+                        <span className='flex gap-3 bg-[#d5dae0] p-2 mt-4 rounded-xl w-28 justify-between items-center'>
+                            <button className='text-2xl text-slate-600 font-bold' onClick={() => upvoteComment(1, comment.id)}>+</button>
+                            <p className='text-2xl font-bold'>{vote}</p>
+                            <button className='text-2xl text-slate-600 font-bold' onClick={() => DownVote(1, comment.id)}>-</button>
+                        </span>
+    
                         <span className='flex items-center gap-4'>
                             <button className='flex items-center gap-1 hover:scale-105 transition-all duration-200 ease-in-out text-red-600 font-bold' onClick={handleCommentModal} >
                                 <MdDelete />
@@ -198,8 +234,9 @@ const Commentitems:React.FC<CommentItemsProps> = ({ comment, currentUser, addRep
                                 Edit
                             </button>
                         </span>
-                    )}
-                </span>
+                    </span>   
+                )}
+                
 
                     {
                       isOpen && <DeleteCommentModal deleteCommentOrReply={deleteCommentOrReply} commentId={comment.id} handleCommentModal={handleCommentModal} />

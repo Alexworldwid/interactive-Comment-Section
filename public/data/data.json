@@ -3,7 +3,7 @@
     "id": 1,
     "content": "Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.",
     "createdAt": "1 month ago",
-    "score": 31,
+    "score": 7,
     "user": {
       "image": {
         "png": "/images/avatars/image-amyrobson.png",
@@ -11,13 +11,28 @@
       },
       "username": "amyrobson"
     },
-    "replies": []
+    "replies": [
+      {
+        "id": 1,
+        "content": "wow",
+        "createdAt": "2024-05-29T10:29:30.996Z",
+        "score": 5,
+        "user": {
+          "image": {
+            "png": "/images/avatars/image-juliusomo.png",
+            "webp": "/images/avatars/image-juliusomo.webp"
+          },
+          "username": "juliusomo"
+        },
+        "replyingTo": "amyrobson"
+      }
+    ]
   },
   {
     "id": 2,
     "content": "Woah, your project looks awesome! How long have you been coding for? I'm still new, but think I want to dive into React as well soon. Perhaps you can give me an insight on where I can learn React? Thanks!",
     "createdAt": "2 weeks ago",
-    "score": 5,
+    "score": 8,
     "user": {
       "image": {
         "png": "/images/avatars/image-maxblagun.png",
@@ -30,7 +45,7 @@
         "id": 1,
         "content": "If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first.",
         "createdAt": "1 week ago",
-        "score": 70,
+        "score": 3,
         "replyingTo": "maxblagun",
         "user": {
           "image": {
@@ -39,51 +54,7 @@
           },
           "username": "ramsesmiron"
         }
-      },
-      {
-        "id": 2,
-        "content": "adewale",
-        "createdAt": "2024-05-29T08:44:02.421Z",
-        "score": 0,
-        "user": {
-          "image": {
-            "png": "/images/avatars/image-juliusomo.png",
-            "webp": "/images/avatars/image-juliusomo.webp"
-          },
-          "username": "juliusomo"
-        },
-        "replyingTo": "ramsesmiron"
       }
     ]
-  },
-  {
-    "id": 4,
-    "content": "Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.",
-    "createdAt": "2024-05-29T09:30:49.396Z",
-    "score": 0,
-    "user": {
-      "image": {
-        "png": "/images/avatars/image-juliusomo.png",
-        "webp": "/images/avatars/image-juliusomo.webp"
-      },
-      "username": "juliusomo"
-    },
-    "replyingTo": null,
-    "replies": []
-  },
-  {
-    "id": 4,
-    "content": "Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.",
-    "createdAt": "2024-05-29T09:36:40.870Z",
-    "score": 0,
-    "user": {
-      "image": {
-        "png": "/images/avatars/image-juliusomo.png",
-        "webp": "/images/avatars/image-juliusomo.webp"
-      },
-      "username": "juliusomo"
-    },
-    "replyingTo": null,
-    "replies": []
   }
 ]

@@ -63,7 +63,7 @@ const Commentlist:React.FC<CommentlistProps> = ({ comments, user, addNewComment,
 
     
     return (
-        <section>
+        <section className='w-full max-w-[1000px]'>
             <ul>
                 {comments.map(comment => (
                     <li key={`comment-${comment.id}`}>
@@ -75,7 +75,7 @@ const Commentlist:React.FC<CommentlistProps> = ({ comments, user, addNewComment,
                         deleteCommentOrReply={deleteCommentOrReply}
                         
                         />
-                        <ul className='flex flex-col items-end border-l-2 border-black border-solid'>
+                        <ul className='flex flex-col items-end border-l-2 border-slate-300 border-solid md:ml-10'>
                             {comment.replies && comment.replies.map(reply => (
                                 <ReplyItem 
                                 key={`reply-${reply.id}`}

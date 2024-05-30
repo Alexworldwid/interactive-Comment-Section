@@ -116,20 +116,39 @@ const ReplyItem: React.FC<ReplyItemProps> = ({ reply, currentUser, addReply, edi
     return (
         <>
         {currentUser.username !== reply.user.username && (
-            <li className='w-[90%]'>
-                <div className='bg-white mb-4 rounded-lg p-4 w-full'>
-                    <span className='flex gap-10 items-center mb-2'>
-                        <Image src={reply.user.image.webp} width={40} height={20} alt={`${reply.user.username} image`} />
-                        <p className='text-[#5457B6] text-lg md:text-xl font-bold'>{reply.user.username}</p>
-                        <p className='text-lg md:text-xl text-slate-400 font-semibold'>{reply.createdAt}</p>
+            <li className='w-[90%] md:w-[97%]'>
+                <div className='bg-white mb-4 rounded-lg p-4 w-full md:flex items-start md:gap-2'>
+                    {/* desktop view */}
+                    <span className='hidden md:flex flex-col bg-[#d5dae0] rounded-xl w-20 justify-between items-center'>
+                        <button className='text-2xl text-slate-600 font-bold' onClick={() => upVote(1, comment.id, reply.id)}>+</button>
+                        <p className='text-2xl font-bold'>{replyScore}</p>
+                        <button className='text-2xl text-slate-600 font-bold' onClick={() => downVote(1, comment.id, reply.id)}>-</button>
                     </span>
 
-                    <span>
-                        <p className='text-lg md:text-xl font-semibold text-slate-400'><span className='text-[#5457B6] font-bold'>@{reply.replyingTo} </span>{reply.content}</p>
+                    <div>
+                        <div className='md:flex md:items-center md:justify-between'>
+                            <span className='flex gap-10 items-center mb-2'>
+                                <Image src={reply.user.image.webp} width={40} height={20} alt={`${reply.user.username} image`} />
+                                <p className='text-[#5457B6] text-lg md:text-xl font-bold'>{reply.user.username}</p>
+                                <p className='text-lg md:text-xl text-slate-400 font-semibold'>{reply.createdAt}</p>
+                            </span>
 
-                    </span>
+                            <button onClick={handleIsReplying} className='hidden md:flex items-center gap-2 hover:scale-105 transition-all duration-200 ease-in-out text-[#5457B6] font-bold'>
+                                <FaReply  />
+                                Reply
+                            </button>
+                        </div>
+                        
 
-                    <span className='flex justify-between items-center pb-4'>
+                        <span>
+                            <p className='text-lg md:text-xl font-semibold text-slate-400'><span className='text-[#5457B6] font-bold'>@{reply.replyingTo} </span>{reply.content}</p>
+
+                        </span>
+                    </div>
+                    
+
+                    {/* mobile view */}
+                    <span className='flex justify-between items-center pb-4 md:hidden'>
                         <span className='flex gap-3 bg-[#d5dae0] p-2 mt-4 rounded-xl w-28 justify-between items-center'>
                             <button className='text-2xl text-slate-600 font-bold' onClick={() => upVote(1, comment.id, reply.id)}>+</button>
                             <p className='text-2xl font-bold'>{replyScore}</p>
@@ -158,40 +177,22 @@ const ReplyItem: React.FC<ReplyItemProps> = ({ reply, currentUser, addReply, edi
         )}
 
         {currentUser.username === reply.user.username && (
-            <li className='bg-white mb-4 rounded-lg p-4 w-[90%]'>
-                <span className='flex gap-10 items-center mb-2'>
-                    <Image src={currentUser.image.png} alt={`${currentUser.username} image`} width={40} height={40} />
-                    <p>{currentUser.username} <span>you</span></p>
-                    <p>{formattedTime}</p>
+            <li className='bg-white mb-4 rounded-lg p-4 w-[90%] md:w-[97%] md:flex md:items-start md:gap-3'>
+                <span className='hidden md:flex flex-col gap-3 bg-[#d5dae0] rounded-xl w-11 justify-between items-center'>
+                    <button className='text-2xl text-slate-600 font-bold' onClick={() => upVote(1, comment.id, reply.id)}>+</button>
+                    <p className='text-2xl font-bold'>{replyScore}</p>
+                    <button className='text-2xl text-slate-600 font-bold' onClick={() => downVote(1, comment.id, reply.id)}>-</button>
                 </span>
 
-                <span>
-                    {!editing && (
-                         <p className='text-[#5457B6] font-bold'>@{reply.replyingTo} <span className='text-lg md:text-xl font-semibold text-slate-400'>{reply.content}</span></p>
-                    )}
-                   
-                 {editing && (
-                       <EditReplyForm 
-                       content={reply.content} 
-                       parentId={comment.id} 
-                       replyId={reply.id} 
-                       replyingTo={reply.replyingTo} 
-                       editReply={editReply} 
-                       handleIsEditing={handleIsEditing}
-                       /> 
-                   )}
-                    
-                </span>
+                <div className='w-full'>
+                    <div className='flex items-center justify-between '>
+                        <span className='flex gap-5 items-center mb-2'>
+                            <Image src={currentUser.image.png} alt={`${currentUser.username} image`} width={40} height={40} />
+                            <p>{currentUser.username} <span>you</span></p>
+                            <p>{formattedTime}</p>
+                        </span>
 
-                <span className='flex justify-between items-center pb-4'>
-                    <span className='flex gap-3 bg-[#d5dae0] p-2 mt-4 rounded-xl w-28 justify-between items-center'>
-                        <button className='text-2xl text-slate-600 font-bold' onClick={() => upVote(1, comment.id, reply.id)}>+</button>
-                        <p className='text-2xl font-bold'>{replyScore}</p>
-                        <button className='text-2xl text-slate-600 font-bold' onClick={() => downVote(1, comment.id, reply.id)}>-</button>
-                    </span>
-
-                    {!editing && (
-                        <span className='flex items-center gap-4'>
+                        <span className='md:flex items-center gap-4 hidden'>
                             <button className='flex items-center gap-1 hover:scale-105 transition-all duration-200 ease-in-out text-red-600 font-bold' onClick={handleDeleteReplyModal}>
                                 <MdDelete />
                                 Delete
@@ -202,10 +203,52 @@ const ReplyItem: React.FC<ReplyItemProps> = ({ reply, currentUser, addReply, edi
                                 Edit
                             </button>
                         </span>
-                    )}
+                    </div>
                     
-                </span>
 
+                    <span>
+                        {!editing && (
+                            <p className='text-[#5457B6] font-bold'>@{reply.replyingTo} <span className='text-lg md:text-xl font-semibold text-slate-400'>{reply.content}</span></p>
+                        )}
+                    
+                    {editing && (
+                        <EditReplyForm 
+                        content={reply.content} 
+                        parentId={comment.id} 
+                        replyId={reply.id} 
+                        replyingTo={reply.replyingTo} 
+                        editReply={editReply} 
+                        handleIsEditing={handleIsEditing}
+                        /> 
+                    )}
+                        
+                    </span>
+                </div>
+                
+
+                {!editing && (
+                    <span className='flex justify-between items-center pb-4 md:hidden'>
+                        <span className='flex gap-3 bg-[#d5dae0] p-2 mt-4 rounded-xl w-28 justify-between items-center'>
+                            <button className='text-2xl text-slate-600 font-bold' onClick={() => upVote(1, comment.id, reply.id)}>+</button>
+                            <p className='text-2xl font-bold'>{replyScore}</p>
+                            <button className='text-2xl text-slate-600 font-bold' onClick={() => downVote(1, comment.id, reply.id)}>-</button>
+                        </span>
+
+                        <span className='flex items-center gap-4'>
+                            <button className='flex items-center gap-1 hover:scale-105 transition-all duration-200 ease-in-out text-red-600 font-bold' onClick={handleDeleteReplyModal}>
+                                <MdDelete />
+                                Delete
+                            </button>
+                            
+                            <button onClick={handleIsEditing} className='flex items-center gap-1 hover:scale-105 transition-all duration-200 ease-in-out text-[#5457B6] font-bold' >
+                                <CiEdit />
+                                Edit
+                            </button>
+                        </span>    
+                    </span>
+        
+                )}
+                
                 { deleteReplyModalIsOpen && <DeleteReplyModal deleteCommentOrReply={deleteCommentOrReply} commentId={comment.id} replyId={reply.id} handleDeleteReply={handleDeleteReplyModal} /> }
             </li>
         )}

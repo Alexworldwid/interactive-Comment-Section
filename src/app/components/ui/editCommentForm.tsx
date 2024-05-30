@@ -23,8 +23,8 @@ const EditForm: React.FC<EditFormProps> = ({editComment, commentId, content, han
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
+        <form className='w-full' onSubmit={handleSubmit}>
+            <div className='w-full'>
                 <textarea 
                 name="updateComment" 
                 id="updateComment"
@@ -32,7 +32,7 @@ const EditForm: React.FC<EditFormProps> = ({editComment, commentId, content, han
                 onChange={(e) => setUpdatedText(e.target.value)}
                 rows={3}
                 placeholder='Add a comment...'
-                className='w-full border p-4 placeholder:text-xl placeholder:font-semibold'
+                className='w-[100%] border p-4 placeholder:text-xl placeholder:font-semibold'
                 ></textarea>
             </div>
 

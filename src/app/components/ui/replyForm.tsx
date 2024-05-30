@@ -30,19 +30,28 @@ const ReplyForm:React.FC<FormProps> = ({ currentUser, parentId, handleIsReplying
     }
 
     return (
-        <form className='w-full my-4 bg-white p-4' onSubmit={handleSubmit}>
-            <textarea 
-            ref={textareaRef}
-            name="comment" 
-            id="comment" 
-            value={content} 
-            onChange={(e) => setContent(e.target.value)}
-            rows={3}
-            placeholder='Add a comment...'
-            className='w-full border p-4 placeholder:text-xl placeholder:font-semibold'
-            ></textarea>
+        <form className='w-full my-4 bg-white p-4 rounded-lg' onSubmit={handleSubmit}>
+            <div className='flex items-start gap-3'>
+                <Image className='hidden md:block' src={currentUser.image.png} alt={currentUser.username} width={40} height={40} />
 
-            <div className='flex justify-between w-full mt-3'>
+                <textarea 
+                ref={textareaRef}
+                name="comment" 
+                id="comment" 
+                value={content} 
+                onChange={(e) => setContent(e.target.value)}
+                rows={3}
+                placeholder='Add a comment...'
+                className='w-full border p-4 placeholder:text-xl placeholder:font-semibold'
+                ></textarea>
+
+                <button type='submit' className='text-2xl font-semibold hidden md:block'>
+                    Reply
+                </button>
+            </div>
+            
+
+            <div className='flex md:hidden justify-between w-full mt-3 '>
                 <Image src={currentUser.image.png} alt={currentUser.username} width={40} height={40} />
                 
                 <button type='submit' className='text-2xl font-semibold'>
