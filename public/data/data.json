@@ -54,6 +54,20 @@
           },
           "username": "ramsesmiron"
         }
+      },
+      {
+        "id": 2,
+        "content": "just Take your time with javascript. React only takes like a day to learn if you understand javascript   ",
+        "createdAt": "2024-05-30T08:31:25.370Z",
+        "score": 0,
+        "user": {
+          "image": {
+            "png": "/images/avatars/image-juliusomo.png",
+            "webp": "/images/avatars/image-juliusomo.webp"
+          },
+          "username": "juliusomo"
+        },
+        "replyingTo": "maxblagun"
       }
     ]
   }

@@ -6,12 +6,12 @@ import path from "path";
 
 const dataFilePath = path.join(process.cwd(), 'public', 'data', 'data.json');
 
-export const readCommentsFromFile = async () => {
+const readCommentsFromFile = async () => {
   const data = await fs.readFile(dataFilePath, 'utf-8');
   return JSON.parse(data) as Comment[]
 };
 
-export const writeCommentsToFile = async (comments: Comment[]) => {
+const writeCommentsToFile = async (comments: Comment[]) => {
   await fs.writeFile(dataFilePath, JSON.stringify(comments, null, 2))
 }
 
